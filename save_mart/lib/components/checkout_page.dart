@@ -37,6 +37,7 @@ class CheckoutPage extends StatelessWidget {
             ),
             ListView.builder(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: cart.items.length,
               itemBuilder: (context, index) {
                 final cartItem = cart.items[index];
@@ -83,37 +84,65 @@ class CheckoutPage extends StatelessWidget {
             ),
             // Personal Information Section
             Container(
-              color: Colors.grey[200],
-              child: ListTile(
-                title: const Text('Personal information'),
-                subtitle: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Ada Dennis'),
-                    Text('ad@gmail.com'),
-                    Text('09100000000'),
-                  ],
-                ),
-                trailing: TextButton(
-                  onPressed: () {
-                    // Implement edit functionality
-                  },
-                  child: const Text('Edit'),
-                ),
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Personal information',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      TextButton(
+                        onPressed: () {
+                          // Implement edit functionality
+                        },
+                        child: const Text('Edit'),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    color: Colors.grey[200],
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Ada Dennis'),
+                        Text('ad@gmail.com'),
+                        Text('09100000000'),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             // Delivery Option Section
             Container(
-              color: Colors.grey[200],
-              child: ListTile(
-                title: const Text('Delivery option'),
-                subtitle: const Text('Pick up point\nIkeja, Lagos'),
-                trailing: TextButton(
-                  onPressed: () {
-                    // Implement edit functionality
-                  },
-                  child: const Text('Edit'),
-                ),
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Delivery option',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      TextButton(
+                        onPressed: () {
+                          // Implement edit functionality
+                        },
+                        child: const Text('Edit'),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    color: Colors.grey[200],
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text('Pick up point\nIkeja, Lagos'),
+                  ),
+                ],
               ),
             ),
             Padding(
