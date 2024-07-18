@@ -1,0 +1,45 @@
+name: save_mart
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  http: ^1.2.1
+  carousel_slider: ^4.2.1
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+  - assets/images/product1.webp
+  - assets/images/product2.webp
+  - assets/images/product3.webp
+  - assets/images/noImage.png
+  - assets/images/nike.png
+  - assets/images/jordan.png
+  - assets/images/gucci.png
+  - assets/images/balen.png
+  - assets/images/addidas.png
+  - assets/images/nb.png
+  - assets/images/rb.png
+  - assets/images/puma.jpg
+  - assets/images/converse.jpg
+  - assets/images/asics.jpg
