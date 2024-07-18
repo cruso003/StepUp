@@ -14,6 +14,8 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Cart'),
+        titleTextStyle: const TextStyle(
+            fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
       ),
       body: cart.isEmpty
           ? const Center(
@@ -63,7 +65,10 @@ class CartPage extends StatelessWidget {
                                                   height: 30,
                                                   decoration: BoxDecoration(
                                                     color: cartItem.color,
-                                                    shape: BoxShape.circle,
+                                                    shape: BoxShape.rectangle,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
                                                     border: Border.all(
                                                       color: Colors.grey,
                                                     ),
@@ -75,7 +80,7 @@ class CartPage extends StatelessWidget {
                                                     cartItem.color ??
                                                         Colors.transparent),
                                                 style: const TextStyle(
-                                                    fontSize: 16),
+                                                    fontSize: 18),
                                               ),
                                               const SizedBox(width: 5),
                                               const Text("|"),
@@ -83,7 +88,7 @@ class CartPage extends StatelessWidget {
                                               Text(
                                                 'Size: ${cartItem.size}',
                                                 style: const TextStyle(
-                                                    fontSize: 16),
+                                                    fontSize: 18),
                                               ),
                                             ],
                                           ),

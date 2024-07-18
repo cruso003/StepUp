@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:save_mart/components/products_page.dart';
 import 'package:save_mart/services/api_services.dart';
 import '../models/product.dart';
 import 'product_details_screen.dart';
@@ -170,7 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 20),
                         Center(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProductsPage(),
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue.shade900,
                               foregroundColor: Colors.white,

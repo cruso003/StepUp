@@ -27,16 +27,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Future<void> _fetchRelatedProducts() async {
-    print('Fetching related products for: ${widget.product}');
     try {
       List<Product> products =
           await apiService.fetchProductsByCategory(widget.product.brand);
       setState(() {
         relatedProducts = products;
       });
-
-      // Debug print to verify fetched products
-      print('Fetched ${products.length} related products:');
       products.forEach((product) {
         print('${product.name} - ${product.brand}');
       });
@@ -78,8 +74,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   void addToCart(Product product) {
     final cart = Provider.of<CartModel>(context, listen: false);
-    print(
-        'Adding to cart: $product, Quantity: $quantity, Size: $selectedSize, Color: $selectedColor');
     cart.addProduct(product, quantity, selectedSize, selectedColor);
     Navigator.push(
       context,
@@ -231,7 +225,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     builder: (BuildContext context) {
                       return Image.network(
                         imageUrl,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         width: double.infinity,
                       );
                     },
@@ -271,9 +265,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.favorite_border, color: Colors.red),
+                    icon: Icon(
+                      wishlistedProductIds.contains(widget.product.id)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: wishlistedProductIds.contains(widget.product.id)
+                          ? Colors.red
+                          : Colors.grey,
+                    ),
                     onPressed: () {
-                      // Handle wishlist toggle
+                      toggleWishlist(widget.product.id);
                     },
                   ),
                 ],
@@ -359,9 +360,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         selectedColor = color;
                       });
                     },
-                    child: CircleAvatar(
-                      radius: 15,
-                      backgroundColor: color,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(8),
+                        border: selectedColor == color
+                            ? Border.all(color: Colors.white, width: 2)
+                            : null,
+                      ),
                       child: selectedColor == color
                           ? const Icon(Icons.check, color: Colors.white)
                           : null,
@@ -370,6 +378,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
+
               const Text(
                 'Quantity',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -399,9 +408,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              const Text(
-                'More Products',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Text(
+                'More From ${widget.product.brand}',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               relatedProducts.isEmpty

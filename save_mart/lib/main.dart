@@ -49,19 +49,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _pages.addAll([
-      HomeScreen(),
-      ProductsPage(),
-      CartPage(),
-      OrdersPage(),
-      ProfilePage(),
-    ]);
-  }
+  final List<Widget> _pages = [
+    HomeScreen(),
+    const ProductsPage(),
+    CartPage(),
+    const OrdersPage(),
+    ProfilePage(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -72,16 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex != 0
-          ? AppBar(
-              title: Text(
-                widget.title,
-                style:
-                    const TextStyle(color: Color.fromARGB(255, 114, 112, 112)),
-              ),
-              backgroundColor: Theme.of(context).primaryColor,
-            )
-          : null,
+      appBar: null,
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -109,6 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue.shade900,
         unselectedItemColor: Colors.black,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         onTap: _onItemTapped,
       ),
     );

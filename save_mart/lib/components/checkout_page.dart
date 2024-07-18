@@ -1,9 +1,184 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:save_mart/components/order_success_page.dart';
 import 'package:save_mart/models/cart.dart';
 import 'package:save_mart/models/product.dart';
-import 'package:provider/provider.dart';
 
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
+  const CheckoutPage({super.key});
+
+  @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  bool _isCardSelected = false;
+  bool _isFormValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_validateForm);
+    _emailController.addListener(_validateForm);
+    _phoneController.addListener(_validateForm);
+  }
+
+  void _validateForm() {
+    setState(() {
+      _isFormValid = _nameController.text.isNotEmpty &&
+          _emailController.text.isNotEmpty &&
+          _phoneController.text.isNotEmpty &&
+          _isCardSelected;
+    });
+  }
+
+  void _selectCard(bool? value) {
+    setState(() {
+      _isCardSelected = value ?? false;
+      _validateForm();
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  void _showProceedModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16.0,
+            right: 16.0,
+            top: 16.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Select a payment option',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(color: Colors.grey.shade300),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.credit_card, color: Colors.red),
+                  title: const Text('**** **** **** 1234\n05/24'),
+                  trailing: Radio(
+                    value: true,
+                    groupValue: _isCardSelected,
+                    onChanged: _selectCard,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  // Add a new card action
+                },
+                child: const Text(
+                  'Add a new Card',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Full name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email address',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Phone number',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isFormValid
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OrderSuccessPage(),
+                            ),
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _isFormValid ? Colors.blue.shade900 : Colors.grey,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text('Proceed to payment'),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartModel>(context);
@@ -11,14 +186,15 @@ class CheckoutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
+        titleTextStyle: const TextStyle(
+            fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Order List Section
             Container(
-              color: Colors.grey[200],
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -42,58 +218,100 @@ class CheckoutPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final cartItem = cart.items[index];
                 final quantity = cart.getProductQuantity(cartItem);
-                return ListTile(
-                  leading: Image.network(cartItem.product.imageUrls[0]),
-                  title: Text(cartItem.product.name),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                return Card(
+                  margin: const EdgeInsets.all(12.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(color: Colors.grey.shade50),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      leading: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Image.network(
+                          cartItem.product.imageUrls[0],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      title: Text(cartItem.product.name),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (cartItem.color != null)
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: cartItem.color,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.grey,
+                          Row(
+                            children: [
+                              if (cartItem.color != null)
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: cartItem.color,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              const SizedBox(width: 5),
+                              Text(
+                                Product.getColorName(
+                                    cartItem.color ?? Colors.transparent),
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(width: 5),
+                              const Text('|'),
+                              const SizedBox(width: 5),
+                              Text('Size: ${cartItem.size}'),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 4.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade900,
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Text(
+                                  '$quantity',
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ),
-                          const SizedBox(width: 5),
-                          Text(
-                            Product.getColorName(
-                                cartItem.color ?? Colors.transparent),
-                            style: const TextStyle(fontSize: 16),
+                              const SizedBox(width: 5),
+                              const Text('|'),
+                              const SizedBox(width: 5),
+                              Text(
+                                '₦${(cartItem.product.discountedPrice ?? cartItem.product.price) * quantity}',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 5),
-                          const Text('|'),
-                          const SizedBox(width: 5),
-                          Text('Size: ${cartItem.size}'),
                         ],
                       ),
-                      Text(
-                          '₦${(cartItem.product.discountedPrice ?? cartItem.product.price) * quantity}'),
-                    ],
+                    ),
                   ),
-                  trailing: Text('x$quantity'),
                 );
               },
             ),
             // Personal Information Section
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Personal information',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'Personal information',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                       TextButton(
                         onPressed: () {
                           // Implement edit functionality
@@ -106,11 +324,34 @@ class CheckoutPage extends StatelessWidget {
                     color: Colors.grey[200],
                     padding: const EdgeInsets.all(8.0),
                     child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Ada Dennis'),
-                        Text('ad@gmail.com'),
-                        Text('09100000000'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.person_pin_outlined,
+                                    color: Color.fromRGBO(13, 71, 161, 1)),
+                                Text('Ada Dennis'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.phone_android_rounded,
+                                    color: Color.fromRGBO(13, 71, 161, 1)),
+                                Text('09100000000'),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8.0),
+                        Row(
+                          children: [
+                            Icon(Icons.mail_outline,
+                                color: Color.fromRGBO(13, 71, 161, 1)),
+                            Text('ad@gmail.com'),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -140,7 +381,20 @@ class CheckoutPage extends StatelessWidget {
                   Container(
                     color: Colors.grey[200],
                     padding: const EdgeInsets.all(8.0),
-                    child: const Text('Pick up point\nIkeja, Lagos'),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.location_on_outlined,
+                                color: Color.fromRGBO(13, 71, 161, 1)),
+                            Text('Pick up point'),
+                          ],
+                        ),
+                        Text('Ikeja, Lagos')
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -186,13 +440,36 @@ class CheckoutPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Implement proceed functionality
-                      },
-                      child: const Text('Proceed'),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _showCancelDialog(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[200],
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _showProceedModal(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade900,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text('Proceed'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -200,6 +477,33 @@ class CheckoutPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showCancelDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm'),
+          content: const Text('Do you want to go back?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); // Navigate back home
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
