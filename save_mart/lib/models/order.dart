@@ -1,5 +1,3 @@
-// models/order.dart
-
 class Order {
   int? id;
   String customerName;
@@ -31,8 +29,8 @@ class Order {
           '', // Provide a default value if null
       totalAmount: map['totalAmount'] as double? ??
           0.0, // Provide a default value if null
-      date: DateTime.parse(map['date'] as String? ??
-          DateTime.now().toIso8601String()), // Provide a default value if null
+      date: DateTime.parse(
+          map['date'] as String? ?? DateTime.now().toIso8601String()),
       items: items,
     );
   }

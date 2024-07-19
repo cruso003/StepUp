@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.swiftcart.stepup"
+    namespace = "com.example.save_mart"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

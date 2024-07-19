@@ -14,10 +14,8 @@ class CartModel extends ChangeNotifier {
 
     if (existingItemIndex != -1) {
       _items[existingItemIndex].quantity += quantity;
-      print('Updated quantity of existing item: ${_items[existingItemIndex]}');
     } else {
       _items.add(CartItem(product, quantity, size, color));
-      print('Added new item to cart: ${_items.last}');
     }
     notifyListeners();
   }

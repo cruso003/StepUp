@@ -5,6 +5,8 @@ import 'package:save_mart/models/product.dart';
 import 'checkout_page.dart';
 
 class CartPage extends StatelessWidget {
+  const CartPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartModel>(context);

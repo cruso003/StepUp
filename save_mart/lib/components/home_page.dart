@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Converse': 'assets/images/converse.jpg',
                       'Asics': 'assets/images/asics.jpg'
                     };
-                    final displayedBrands = brandImages.keys.take(9).toList();
+                    final displayedBrands = brandImages.keys.take(7).toList();
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -435,8 +435,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Image.network(
                               product.imageUrls[0],
                               fit: BoxFit.cover,
-                              width: 200.0,
-                              height: 200.0,
+                              width: 150.0,
+                              height: 150.0,
                             ),
                           ),
                         ),

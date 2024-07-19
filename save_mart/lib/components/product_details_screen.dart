@@ -27,18 +27,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Future<void> _fetchRelatedProducts() async {
-    try {
-      List<Product> products =
-          await apiService.fetchProductsByCategory(widget.product.brand);
-      setState(() {
-        relatedProducts = products;
-      });
-      products.forEach((product) {
-        print('${product.name} - ${product.brand}');
-      });
-    } catch (e) {
-      print('Error fetching related products: $e');
-    }
+    List<Product> products =
+        await apiService.fetchProductsByCategory(widget.product.brand);
+    setState(() {
+      relatedProducts = products;
+    });
+    products.forEach((product) {});
   }
 
   Set<String> wishlistedProductIds = {};
@@ -73,12 +67,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   void addToCart(Product product) {
+    if (selectedSize == 0 || selectedColor == null) {
+      // Show alert dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Selection Required'),
+            content: const Text('Please select a size and color to continue.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     final cart = Provider.of<CartModel>(context, listen: false);
     cart.addProduct(product, quantity, selectedSize, selectedColor);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CartPage(),
+        builder: (context) => const CartPage(),
       ),
     );
   }
