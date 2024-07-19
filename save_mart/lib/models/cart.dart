@@ -29,6 +29,11 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
+  }
+
   int getProductQuantity(CartItem item) {
     return item.quantity;
   }

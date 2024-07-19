@@ -1,18 +1,20 @@
-# For Task Two, we modify Task One code by replacing our demo data of 3 products with the product data collected from timbu api.
+# Task: Add and Complete all Features of your Timbu Shop App.
 
-# Task Two: 
-Create an app that Implements Timbu Api
-Objectives: Create a Timbu account on timbu.cloud . Get your API key (it only views once). Add some products information on your timbu account under Retail Business. Retrieve all products information using the api. Display the products on a screen in a list.
+## Objectives: add and complete features like the ability to add and remove products from cart, checkout the order. a simulated payment flow, order confirmation and an orders history Screen.
 
 # Requirements:
-Implementation of Timbu API .
-Have a proper mobile architecture.
-The display of at least 10 products with images from the timbu api on a screen in a list.
-show relevant information of the products you have added on timbu in the list item.
+All products must be fetched from the Timbu API. No Placeholder should be found in your app.
+Have at least 20 Unique Products in your product list. They should be categorized.
+Implement the feature of adding and removing products, wishlist or bookmark, checkout of order e.t.c based on your timbu shop design.
+Good shopping experience from start to the completion of an order.
+Create an Orders history screen i.e showing all the completed orders made on your timbu shop. Add an icon on your home screen top bar that navigates to the order history screen. Come up with the design if not available.
+The Orders history item when clicked must go to a details screen of that order and show details of that order.
+The items in the order history screen and details should be cached in a database.
 Proper UI state management and handle errors properly.
+Fix all noticeable issues.
 
-# Save Mark
-Save Mart is a simple sneakers shopping app built with Flutter. It displays a list of products and provides a checkout screen where users can add or remove items from their cart and place orders.
+# StepUp
+StepUp is a simple sneakers shopping app built with Flutter. It displays a list of products and provides a checkout screen where users can add or remove items from their cart and place orders.
 
 ## Features
 
@@ -24,14 +26,20 @@ Save Mart is a simple sneakers shopping app built with Flutter. It displays a li
 
 ## Screenshots
 
-![Products Screen](screenshots/ProductScreen.png)
-![Checkout Screen](screenshots/CheckoutScreen.png)
-![Empty Checkout Screen](screenshots/EmptyCheckoutScreen.png)
-![Order Success Screen](screenshots/OrderSuccessful.png)
+![1](screenshots/ss1.png)
+![2](screenshots/ss2png)
+![2](screenshots/ss3.png)
+![4](screenshots/ss4.png)
+![5](screenshots/ss5.png)
+![6](screenshots/ss6png)
+![7](screenshots/ss7.png)
+![8](screenshots/ss8.png)
+![7](screenshots/ss9.png)
+![8](screenshots/ss10.png)
 
 ## APK Download
 
-Download the APK file for the app [here](https://www.upload-apk.com/hwSD7rAtZBn6nen).
+Download the APK file for the app [here](https://www.upload-apk.com/en/Jzd1p8ouFKtCw6B).
 
 ## Setup Instructions
 
@@ -71,4 +79,4 @@ flutter build apk
 The APK file will be generated in the build/app/outputs/flutter-apk/ directory.
 
 **Appetize.io Showcase**
-You can try the app virtually via Appetize.io [here](https://appetize.io/app/b_3c6fjbjgkv3c7lz67qgyn2feou).
+You can try the app virtually via Appetize.io [here](https://appetize.io/app/b_o5rgogftwbwus5sbhz4f4gdbca).

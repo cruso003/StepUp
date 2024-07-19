@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:save_mart/components/order_history_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:save_mart/components/products_page.dart';
+import 'package:save_mart/components/provider/wishlist_provider.dart';
+import 'package:save_mart/components/wishlist.dart';
 import 'package:save_mart/services/api_services.dart';
 import '../models/product.dart';
 import 'product_details_screen.dart';
@@ -22,16 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     futureProducts = ApiService().fetchProducts(1, 10);
-  }
-
-  void toggleWishlist(String productId) {
-    setState(() {
-      if (wishlistedProductIds.contains(productId)) {
-        wishlistedProductIds.remove(productId);
-      } else {
-        wishlistedProductIds.add(productId);
-      }
-    });
   }
 
   void navigateToProductDetails(Product product) {
@@ -72,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('StepUp'),
@@ -81,12 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.receipt),
+            icon: const Icon(Icons.favorite_border),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const OrderHistoryScreen()),
+                MaterialPageRoute(builder: (context) => const WishlistPage()),
               );
             },
           ),
@@ -173,10 +165,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 20),
                         _buildSectionTitle('Our Special Offers'),
-                        _buildProductList(products['specialOffer']!),
+                        _buildProductList(
+                            products['specialOffer']!, wishlistProvider),
                         const SizedBox(height: 20),
                         _buildSectionTitle('Featured Sneakers'),
-                        _buildProductList(products['featured']!),
+                        _buildProductList(
+                            products['featured']!, wishlistProvider),
                         const SizedBox(height: 20),
                         Center(
                           child: ElevatedButton(
@@ -232,8 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ClipOval(
           child: Image.asset(
             brandImages[brandName]!,
-            width: 60,
-            height: 60,
+            width: 70,
+            height: 70,
             fit: BoxFit.cover,
           ),
         ),
@@ -261,7 +255,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildProductList(List<Product> products) {
+  Widget _buildProductList(
+      List<Product> products, WishlistProvider wishlistProvider) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -274,12 +269,12 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
-        return _buildProductCard(product);
+        return _buildProductCard(product, wishlistProvider);
       },
     );
   }
 
-  Widget _buildProductCard(Product product) {
+  Widget _buildProductCard(Product product, WishlistProvider wishlistProvider) {
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,15 +304,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   right: 8,
                   child: IconButton(
                     icon: Icon(
-                      wishlistedProductIds.contains(product.id)
+                      wishlistProvider.isInWishlist(product.id)
                           ? Icons.favorite
                           : Icons.favorite_border,
-                      color: wishlistedProductIds.contains(product.id)
+                      color: wishlistProvider.isInWishlist(product.id)
                           ? Colors.red
                           : Colors.grey,
                     ),
                     onPressed: () {
-                      toggleWishlist(product.id);
+                      wishlistProvider.toggleWishlist(product);
                     },
                   ),
                 ),

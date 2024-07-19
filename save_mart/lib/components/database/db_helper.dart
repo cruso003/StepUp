@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:save_mart/models/order.dart';
+import 'package:save_mart/models/product.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -22,14 +23,15 @@ class DBHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 6,
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customerName TEXT,
             totalAmount REAL,
-            date TEXT
+            date TEXT,
+            isCompleted INTEGER
           )
         ''');
         db.execute('''
@@ -37,16 +39,66 @@ class DBHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             orderId INTEGER,
             productName TEXT,
+            productImage TEXT,
             quantity INTEGER,
             unitPrice REAL,
             totalPrice REAL,
+            color INTEGER, 
+            size TEXT,
             FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE
+          )
+        ''');
+        db.execute('''
+          CREATE TABLE wishlist (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            productId TEXT,
+            productName TEXT,
+            productImage TEXT,
+            price REAL,
+            discountedPrice REAL,
+            brand TEXT
           )
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
         if (oldVersion < 2) {
           db.execute('ALTER TABLE orders ADD COLUMN date TEXT');
+        }
+        if (oldVersion < 3) {
+          db.execute('ALTER TABLE orderItems ADD COLUMN productImage TEXT');
+        }
+        if (oldVersion < 4) {
+          db.execute('''
+            CREATE TABLE wishlist (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              productId TEXT,
+              productName TEXT,
+              productImage TEXT,
+              price REAL,
+              discountedPrice REAL,
+              brand TEXT
+            )
+          ''');
+        }
+        if (oldVersion < 5) {
+          db.execute(
+              'ALTER TABLE orders ADD COLUMN isCompleted INTEGER DEFAULT 0');
+          db.execute('ALTER TABLE orderItems ADD COLUMN color TEXT');
+          db.execute('ALTER TABLE orderItems ADD COLUMN size TEXT');
+        }
+        if (oldVersion < 6) {
+          db.execute('''
+          ALTER TABLE orderItems RENAME COLUMN color TO colorTemp
+        ''');
+          db.execute('''
+          ALTER TABLE orderItems ADD COLUMN color INTEGER
+        ''');
+          db.execute('''
+          UPDATE orderItems SET color = colorTemp
+        ''');
+          db.execute('''
+          ALTER TABLE orderItems DROP COLUMN colorTemp
+        ''');
         }
       },
     );
@@ -82,5 +134,48 @@ class DBHelper {
     }
 
     return orders;
+  }
+
+  Future<int> insertWishlistItem(Product product) async {
+    final db = await database;
+    return await db.insert('wishlist', {
+      'productId': product.id,
+      'productName': product.name,
+      'productImage': product.imageUrls[0],
+      'price': product.price,
+      'discountedPrice': product.discountedPrice,
+      'brand': product.brand,
+    });
+  }
+
+  Future<List<Product>> getWishlistItems() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('wishlist');
+
+    return List.generate(maps.length, (i) {
+      return Product(
+        id: maps[i]['productId'],
+        name: maps[i]['productName'],
+        imageUrls: [maps[i]['productImage']],
+        price: maps[i]['price'],
+        discountedPrice: maps[i]['discountedPrice'],
+        brand: maps[i]['brand'],
+        description: '',
+        rating: 0,
+        reviews: 0,
+        colors: [],
+        sizes: [],
+        categories: [],
+      );
+    });
+  }
+
+  Future<void> removeWishlistItem(String productId) async {
+    final db = await database;
+    await db.delete(
+      'wishlist',
+      where: 'productId = ?',
+      whereArgs: [productId],
+    );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:save_mart/components/order_history_screen.dart';
+import 'package:save_mart/components/provider/wishlist_provider.dart';
 import 'package:save_mart/models/cart.dart';
-import 'package:save_mart/models/order_provider.dart';
+import 'package:save_mart/components/provider/order_provider.dart';
 import 'components/home_page.dart';
 import 'components/products_page.dart';
 import 'components/profile_page.dart';
@@ -14,6 +15,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => OrderProvider()),
         ChangeNotifierProvider(create: (context) => CartModel()),
+        ChangeNotifierProvider(create: (context) => WishlistProvider()),
       ],
       child: const MyApp(),
     ),

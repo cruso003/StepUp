@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:save_mart/components/cart_page.dart';
+import 'package:save_mart/components/provider/wishlist_provider.dart';
 import 'package:save_mart/models/cart.dart';
 import 'package:save_mart/services/api_services.dart';
 import '../models/product.dart';
@@ -41,21 +42,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Color? selectedColor;
   int _currentCarouselIndex = 0;
 
-  void toggleWishlist(String productId) {
-    setState(() {
-      if (wishlistedProductIds.contains(productId)) {
-        wishlistedProductIds.remove(productId);
-      } else {
-        wishlistedProductIds.add(productId);
-      }
-    });
-  }
-
   void navigateToProductDetails(Product product) {
     // Reset selectedSize and selectedColor when navigating to a new product
     setState(() {
-      selectedSize = 0; // Reset to default size (or appropriate initial value)
-      selectedColor = null; // Reset to default color (or null)
+      selectedSize = 0;
+      selectedColor = null;
     });
 
     Navigator.push(
@@ -99,7 +90,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildMoreProductCard(Product product) {
+  Widget _buildMoreProductCard(
+      Product product, WishlistProvider wishlistProvider) {
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,15 +121,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   right: 8,
                   child: IconButton(
                     icon: Icon(
-                      wishlistedProductIds.contains(product.id)
+                      wishlistProvider.isInWishlist(product.id)
                           ? Icons.favorite
                           : Icons.favorite_border,
-                      color: wishlistedProductIds.contains(product.id)
+                      color: wishlistProvider.isInWishlist(product.id)
                           ? Colors.red
                           : Colors.grey,
                     ),
                     onPressed: () {
-                      toggleWishlist(product.id);
+                      wishlistProvider.toggleWishlist(product);
                     },
                   ),
                 ),
@@ -207,6 +199,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -282,15 +275,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   IconButton(
                     icon: Icon(
-                      wishlistedProductIds.contains(widget.product.id)
+                      wishlistProvider.isInWishlist(widget.product.id)
                           ? Icons.favorite
                           : Icons.favorite_border,
-                      color: wishlistedProductIds.contains(widget.product.id)
+                      color: wishlistProvider.isInWishlist(widget.product.id)
                           ? Colors.red
                           : Colors.grey,
                     ),
                     onPressed: () {
-                      toggleWishlist(widget.product.id);
+                      wishlistProvider.toggleWishlist(widget.product);
                     },
                   ),
                 ],
@@ -383,11 +376,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         color: color,
                         borderRadius: BorderRadius.circular(8),
                         border: selectedColor == color
-                            ? Border.all(color: Colors.white, width: 2)
+                            ? Border.all(color: Colors.grey, width: 2)
                             : null,
                       ),
                       child: selectedColor == color
-                          ? const Icon(Icons.check, color: Colors.white)
+                          ? Icon(Icons.check, color: Colors.blue.shade900)
                           : null,
                     ),
                   );
@@ -445,7 +438,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       itemCount: relatedProducts.length,
                       itemBuilder: (context, index) {
                         final product = relatedProducts[index];
-                        return _buildMoreProductCard(product);
+                        return _buildMoreProductCard(product, wishlistProvider);
                       },
                     ),
 
@@ -463,7 +456,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       addToCart(widget.product);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.blue.shade900,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

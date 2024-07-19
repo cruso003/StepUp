@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:save_mart/components/order_success_page.dart';
 import 'package:save_mart/models/cart.dart';
 import 'package:save_mart/models/order.dart';
-import 'package:save_mart/models/order_provider.dart';
+import 'package:save_mart/components/provider/order_provider.dart';
 import 'package:save_mart/models/product.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -162,9 +162,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           final orderItems = cart.items.map((cartItem) {
                             return OrderItem(
                               productName: cartItem.product.name,
+                              productImage: cartItem.product.imageUrls[0],
                               quantity: cart.getProductQuantity(cartItem),
                               unitPrice: cartItem.product.discountedPrice ??
                                   cartItem.product.price,
+                              color: cartItem.color,
+                              size: cartItem.size.toString(),
                             );
                           }).toList();
 
@@ -172,10 +175,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             customerName: _nameController.text,
                             totalAmount: cart.totalPrice + 5,
                             date: DateTime.now(),
+                            isCompleted: false, // Mark order as active
                             items: orderItems,
                           );
 
                           await orderProvider.addOrder(order);
+
+                          // Clear the cart after placing the order
+                          cart.clearCart();
 
                           Navigator.push(
                             context,

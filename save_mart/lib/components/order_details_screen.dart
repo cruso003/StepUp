@@ -23,6 +23,8 @@ class OrderDetailsScreen extends StatelessWidget {
             const SizedBox(height: 16.0),
             const Text('Items:'),
             ...order.items.map((item) => ListTile(
+                  leading:
+                      Image.network(item.productImage, width: 50, height: 50),
                   title: Text(item.productName),
                   subtitle: Text('${item.quantity} x \$${item.unitPrice}'),
                   trailing: Text('\$${item.totalPrice}'),

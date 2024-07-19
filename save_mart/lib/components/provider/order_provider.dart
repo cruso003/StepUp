@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:save_mart/components/database/db_helper.dart';
-import 'order.dart';
+import '../../models/order.dart';
 
 class OrderProvider with ChangeNotifier {
   final DBHelper _dbHelper = DBHelper();
 
+  List<Order> _activeOrders = [];
   List<Order> _completedOrders = [];
 
+  List<Order> get activeOrders => _activeOrders;
   List<Order> get completedOrders => _completedOrders;
 
   OrderProvider() {
@@ -14,7 +16,9 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> _fetchOrders() async {
-    _completedOrders = await _dbHelper.getOrders();
+    final allOrders = await _dbHelper.getOrders();
+    _activeOrders = allOrders.where((order) => !order.isCompleted).toList();
+    _completedOrders = allOrders.where((order) => order.isCompleted).toList();
     notifyListeners();
   }
 

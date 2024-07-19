@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:save_mart/components/product_details_screen.dart';
+import 'package:save_mart/components/provider/wishlist_provider.dart';
 import 'package:save_mart/services/api_services.dart';
 import '../models/product.dart';
 
@@ -37,16 +39,6 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
-  void toggleWishlist(String productId) {
-    setState(() {
-      if (wishlistedProductIds.contains(productId)) {
-        wishlistedProductIds.remove(productId);
-      } else {
-        wishlistedProductIds.add(productId);
-      }
-    });
-  }
-
   void navigateToProductDetails(Product product) {
     Navigator.push(
       context,
@@ -57,6 +49,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
@@ -98,7 +91,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     ),
                   );
                 }
-                return _buildProductCard(products[index]);
+                return _buildProductCard(products[index], wishlistProvider);
               },
             ),
           ),
@@ -108,7 +101,7 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  Widget _buildProductCard(Product product) {
+  Widget _buildProductCard(Product product, WishlistProvider wishlistProvider) {
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,15 +131,15 @@ class _ProductsPageState extends State<ProductsPage> {
                   right: 8,
                   child: IconButton(
                     icon: Icon(
-                      wishlistedProductIds.contains(product.id)
+                      wishlistProvider.isInWishlist(product.id)
                           ? Icons.favorite
                           : Icons.favorite_border,
-                      color: wishlistedProductIds.contains(product.id)
+                      color: wishlistProvider.isInWishlist(product.id)
                           ? Colors.red
                           : Colors.grey,
                     ),
                     onPressed: () {
-                      toggleWishlist(product.id);
+                      wishlistProvider.toggleWishlist(product);
                     },
                   ),
                 ),
