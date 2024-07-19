@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:save_mart/components/order_success_page.dart';
 import 'package:save_mart/models/cart.dart';
+import 'package:save_mart/models/order.dart';
+import 'package:save_mart/models/order_provider.dart';
 import 'package:save_mart/models/product.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -149,7 +151,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isFormValid
-                      ? () {
+                      ? () async {
+                          // Save the order and navigate to success page
+                          final orderProvider = Provider.of<OrderProvider>(
+                              context,
+                              listen: false);
+                          final cart =
+                              Provider.of<CartModel>(context, listen: false);
+
+                          final orderItems = cart.items.map((cartItem) {
+                            return OrderItem(
+                              productName: cartItem.product.name,
+                              quantity: cart.getProductQuantity(cartItem),
+                              unitPrice: cartItem.product.discountedPrice ??
+                                  cartItem.product.price,
+                            );
+                          }).toList();
+
+                          final order = Order(
+                            customerName: _nameController.text,
+                            totalAmount: cart.totalPrice + 5,
+                            date: DateTime.now(),
+                            items: orderItems,
+                          );
+
+                          await orderProvider.addOrder(order);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -169,9 +196,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: const Text('Proceed to payment'),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
             ],
           ),
         );
@@ -416,7 +441,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Delivery fee'),
-                      Text('₦1,550.00'),
+                      Text('₦5.00'),
                     ],
                   ),
                   const Row(
@@ -434,7 +459,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '₦${(cart.totalPrice + 1550).toStringAsFixed(2)}',
+                        '₦${(cart.totalPrice + 5).toStringAsFixed(2)}',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

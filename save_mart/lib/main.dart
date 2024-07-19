@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:save_mart/components/order_history_screen.dart';
 import 'package:save_mart/models/cart.dart';
+import 'package:save_mart/models/order_provider.dart';
 import 'components/home_page.dart';
 import 'components/products_page.dart';
-import 'components/orders_page.dart';
 import 'components/profile_page.dart';
 import 'components/cart_page.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CartModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => OrderProvider()),
+        ChangeNotifierProvider(create: (context) => CartModel()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -53,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeScreen(),
     const ProductsPage(),
     CartPage(),
-    const OrdersPage(),
+    OrderHistoryScreen(),
     ProfilePage(),
   ];
 

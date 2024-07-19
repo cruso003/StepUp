@@ -1,11 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:save_mart/components/order_history_screen.dart';
 import 'package:save_mart/components/products_page.dart';
 import 'package:save_mart/services/api_services.dart';
 import '../models/product.dart';
 import 'product_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -71,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NG-Ezenard'),
+        title: const Text('StepUp'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -79,7 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.receipt),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const OrderHistoryScreen()),
+              );
+            },
           ),
         ],
       ),
@@ -144,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             ...displayedBrands.map((brandName) {
                               return _buildBrandIcon(brandName);
-                            }).toList(),
+                            }),
                             GestureDetector(
                               onTap: () {
                                 showAllBrands(context, brandImages);
