@@ -111,7 +111,31 @@ class Product {
   }
 
   static String getColorName(Color color) {
-    return colorNames[color] ?? 'Unknown';
+    final colorMap = {
+      Colors.red: 'Red',
+      Colors.blue: 'Blue',
+      Colors.yellow: 'Yellow',
+      Colors.green: 'Green',
+      Colors.orange: 'Orange',
+      Colors.purple: 'Purple',
+      Colors.black: 'Black',
+      Colors.white: 'White',
+    };
+
+    // Check if the exact color is in the map
+    if (colorMap.containsKey(color)) {
+      return colorMap[color]!;
+    }
+
+    // Optionally check for close matches
+    final colorValue = color.value;
+    for (var entry in colorMap.entries) {
+      if (entry.key.value == colorValue) {
+        return entry.value;
+      }
+    }
+
+    return '';
   }
 
   static String capitalizeFirstLetter(String input) {

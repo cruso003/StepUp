@@ -39,7 +39,7 @@ StepUp is a simple sneakers shopping app built with Flutter. It displays a list 
 
 ## APK Download
 
-Download the APK file for the app [here](https://www.upload-apk.com/en/Jzd1p8ouFKtCw6B).
+Download the APK file for the app [here](https://www.upload-apk.com/en/Wqh82cQrJ949kpW).
 
 ## Setup Instructions
 
@@ -55,9 +55,8 @@ Follow these instructions to set up and run the app locally.
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/cruso003/HNG_Mobile.git
-   cd HNG_Mobile
-   cd TaskOne
+   git clone https://github.com/cruso003/StepUp.git
+   cd StepUp
    cd save_mart
    ```
 2. **Get the dependencies:**
@@ -79,4 +78,4 @@ flutter build apk
 The APK file will be generated in the build/app/outputs/flutter-apk/ directory.
 
 **Appetize.io Showcase**
-You can try the app virtually via Appetize.io [here](https://appetize.io/app/b_o5rgogftwbwus5sbhz4f4gdbca).
+You can try the app virtually via Appetize.io [here](https://appetize.io/app/b_vp6mdgm2sh53dr7q7ybmj7ekfm).
