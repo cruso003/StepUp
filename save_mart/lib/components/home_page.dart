@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:save_mart/components/brand_product_page.dart';
 import 'package:save_mart/components/products_page.dart';
 import 'package:save_mart/components/provider/wishlist_provider.dart';
 import 'package:save_mart/components/wishlist.dart';
@@ -239,12 +240,22 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return Column(
-      children: [
-        brandIcon,
-        const SizedBox(height: 5),
-        Text(brandName),
-      ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BrandProductsPage(brandName: brandName),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          brandIcon,
+          const SizedBox(height: 5),
+          Text(brandName),
+        ],
+      ),
     );
   }
 

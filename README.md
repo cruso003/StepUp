@@ -39,7 +39,7 @@ StepUp is a simple sneakers shopping app built with Flutter. It displays a list 
 
 ## APK Download
 
-Download the APK file for the app [here](https://www.upload-apk.com/en/Wqh82cQrJ949kpW).
+Download the APK file for the app [here](https://www.upload-apk.com/en/6fNAp3dbiqo4IBy).
 
 ## Setup Instructions
 
@@ -78,4 +78,4 @@ flutter build apk
 The APK file will be generated in the build/app/outputs/flutter-apk/ directory.
 
 **Appetize.io Showcase**
-You can try the app virtually via Appetize.io [here](https://appetize.io/app/b_vp6mdgm2sh53dr7q7ybmj7ekfm).
+You can try the app virtually via Appetize.io [here](https://appetize.io/app/b_vczfjng7dnqy4rxua3gskhfl6m).
