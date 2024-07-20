@@ -37,6 +37,9 @@ StepUp is a simple sneakers shopping app built with Flutter. It displays a list 
 ![7](screenshots/ss9.png)
 ![8](screenshots/ss10.png)
 
+# Figma Design Link 
+[here](https://www.figma.com/design/GkXcZtIpRung91YT7O1LtL/HNG-Tasks?node-id=2591-3319)
+
 ## APK Download
 
 Download the APK file for the app [here](https://www.upload-apk.com/en/6fNAp3dbiqo4IBy).
