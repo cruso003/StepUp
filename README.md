@@ -27,11 +27,11 @@ StepUp is a simple sneakers shopping app built with Flutter. It displays a list 
 ## Screenshots
 
 ![1](screenshots/ss1.png)
-![2](screenshots/ss2png)
+![2](screenshots/ss2.png)
 ![2](screenshots/ss3.png)
 ![4](screenshots/ss4.png)
 ![5](screenshots/ss5.png)
-![6](screenshots/ss6png)
+![6](screenshots/ss6.png)
 ![7](screenshots/ss7.png)
 ![8](screenshots/ss8.png)
 ![7](screenshots/ss9.png)
