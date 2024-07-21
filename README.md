@@ -13,8 +13,8 @@ The items in the order history screen and details should be cached in a database
 Proper UI state management and handle errors properly.
 Fix all noticeable issues.
 
-# StepUp
-StepUp is a simple sneakers shopping app built with Flutter. It displays a list of products and provides a checkout screen where users can add or remove items from their cart and place orders.
+# Stepup (SaveMart)
+Stepup is a continuation of SaveMart. It is a simple sneakers shopping app built with Flutter. It displays a list of products and provides a checkout screen where users can add or remove items from their cart and place orders.
 
 ## Features
 
@@ -23,6 +23,12 @@ StepUp is a simple sneakers shopping app built with Flutter. It displays a list 
 - Ability to add and remove items from the cart.
 - Order success screen.
 - User-friendly and intuitive UI.
+---------------------------
+ **Update**
+- Wishlist
+- Order History Screen
+- Categorized Products etc..
+---------------------------
 
 ## Screenshots
 
