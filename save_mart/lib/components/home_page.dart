@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:save_mart/components/brand_product_page.dart';
+import 'package:save_mart/components/card/product_card.dart';
 import 'package:save_mart/components/products_page.dart';
 import 'package:save_mart/components/provider/wishlist_provider.dart';
 import 'package:save_mart/components/wishlist.dart';
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('StepUp'),
+        title: const Text('SaveMart'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -280,114 +281,13 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
-        return _buildProductCard(product, wishlistProvider);
+        return ChangeNotifierProvider.value(
+          value: Provider.of<WishlistProvider>(context),
+          child: ProductCard(
+            product: product,
+          ),
+        );
       },
-    );
-  }
-
-  Widget _buildProductCard(Product product, WishlistProvider wishlistProvider) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    navigateToProductDetails(product);
-                  },
-                  child: Image.network(
-                    product.imageUrls[0],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/noImage.png',
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: Icon(
-                      wishlistProvider.isInWishlist(product.id)
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: wishlistProvider.isInWishlist(product.id)
-                          ? Colors.red
-                          : Colors.grey,
-                    ),
-                    onPressed: () {
-                      wishlistProvider.toggleWishlist(product);
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(product.brand, style: const TextStyle(fontSize: 12)),
-                Text(product.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.orange, size: 16),
-                    Text('4.5 (100 sold)', style: TextStyle(fontSize: 12)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (product.discountedPrice != null)
-                          Text(
-                            '₦${product.discountedPrice!.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: product.discountedPrice != null
-                                  ? Colors.blue.shade900
-                                  : Colors.grey,
-                            ),
-                          ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '₦${product.price.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: product.discountedPrice == null
-                                ? Colors.blue.shade900
-                                : Colors.grey,
-                            decoration: product.discountedPrice == null
-                                ? TextDecoration.none
-                                : TextDecoration.lineThrough,
-                          ),
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        navigateToProductDetails(product);
-                      },
-                      child: const Icon(Icons.shopping_cart),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 

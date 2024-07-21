@@ -42,8 +42,8 @@ class CartPage extends StatelessWidget {
                                   children: [
                                     Image.network(
                                       cartItem.product.imageUrls[0],
-                                      width: 130,
-                                      height: 130,
+                                      width: 110,
+                                      height: 110,
                                       fit: BoxFit.cover,
                                     ),
                                     const SizedBox(width: 16),
@@ -55,7 +55,7 @@ class CartPage extends StatelessWidget {
                                           Text(
                                             cartItem.product.name,
                                             style: const TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -82,7 +82,7 @@ class CartPage extends StatelessWidget {
                                                     cartItem.color ??
                                                         Colors.transparent),
                                                 style: const TextStyle(
-                                                    fontSize: 18),
+                                                    fontSize: 16),
                                               ),
                                               const SizedBox(width: 5),
                                               const Text("|"),
@@ -90,7 +90,7 @@ class CartPage extends StatelessWidget {
                                               Text(
                                                 'Size: ${cartItem.size}',
                                                 style: const TextStyle(
-                                                    fontSize: 18),
+                                                    fontSize: 16),
                                               ),
                                             ],
                                           ),
@@ -145,7 +145,7 @@ class CartPage extends StatelessWidget {
                                                 Text(
                                                   '₦${(cartItem.product.discountedPrice != null ? cartItem.product.discountedPrice! : cartItem.product.price) * cart.getProductQuantity(cartItem)}',
                                                   style: const TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),

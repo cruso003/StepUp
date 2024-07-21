@@ -191,12 +191,16 @@ class _ProductsPageState extends State<ProductsPage> {
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        navigateToProductDetails(product);
-                      },
-                      child: const Icon(Icons.shopping_cart),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        onPressed: () {
+                          navigateToProductDetails(product);
+                        },
+                        icon: const Icon(Icons.shopping_cart),
+                        color: Colors.blue.shade900, // Icon color
+                      ),
+                    )
                   ],
                 ),
               ],
